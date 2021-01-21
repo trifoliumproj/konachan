@@ -40,3 +40,8 @@ Temporary Items
 Cargo.lock
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,rust
+
+
+# Added by cargo
+
+/target
