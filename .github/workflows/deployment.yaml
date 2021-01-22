@@ -1,0 +1,17 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - master
+      - main
+      - dev
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.DODOCO_BOT_PAT }}
+          repository: trifoliumproj/deployment
+          event-type: kustomization
+          client-payload: '{ "repository": "${{ github.repository }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}" }'
