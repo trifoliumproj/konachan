@@ -69,8 +69,8 @@ pub struct Post {
     pub rating: std::string::String,
     #[prost(bool, tag = "27")]
     pub has_children: bool,
-    #[prost(string, tag = "28")]
-    pub parent_id: std::string::String,
+    #[prost(message, optional, tag = "28")]
+    pub parent_id: ::std::option::Option<::std::string::String>,
     #[prost(string, tag = "29")]
     pub status: std::string::String,
     #[prost(int32, tag = "30")]
