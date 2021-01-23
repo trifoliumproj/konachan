@@ -14,10 +14,21 @@ impl api_server::Api for APIImplementation {
         request: tonic::Request<GalleryRequest>,
     ) -> Result<tonic::Response<GalleryResponse>, tonic::Status> {
         let req = request.into_inner();
-        let _tags = req.tags;
+        let tag = req.tags.get(0);
+        let mut url = reqwest::Url::parse("https://konachan.com/post.json").unwrap();
+        let _ = match tag {
+            Some(unwrapped_tag) => {
+                let tag_name = unwrapped_tag.name.clone();
+                url.query_pairs_mut().append_pair("tags", &tag_name);
+            }
+            None => {
+                return Err(tonic::Status::failed_precondition(
+                    "Tags should not be empty.",
+                ));
+            }
+        };
         let mut ret = GalleryResponse { posts: [].to_vec() };
-        let resp =
-            reqwest::blocking::get("https://konachan.com/post.json?tags=mona_%28genshin_impact%29");
+        let resp = reqwest::blocking::get(url);
         let _ = match resp {
             Ok(res) => {
                 let json = res.json::<Vec<generated::konachan::Post>>();
