@@ -13,7 +13,7 @@ pub struct Tag {
     #[prost(string, tag = "1")]
     pub name: std::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize)]
 pub struct Post {
     #[prost(int32, tag = "1")]
     pub id: i32,
