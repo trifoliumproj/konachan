@@ -15,6 +15,7 @@ impl api_server::Api for APIImplementation {
     ) -> Result<tonic::Response<GalleryResponse>, tonic::Status> {
         let req = request.into_inner();
         let _tags = req.tags;
+        let mut ret = GalleryResponse { posts: [].to_vec() };
         let resp =
             reqwest::blocking::get("https://konachan.com/post.json?tags=mona_%28genshin_impact%29");
         let _ = match resp {
@@ -22,7 +23,8 @@ impl api_server::Api for APIImplementation {
                 let json = res.json::<Vec<generated::konachan::Post>>();
                 let _ = match json {
                     Ok(posts) => {
-                        println!("{:#?}", posts);
+                        ret.posts = posts;
+                        // println!("{:#?}", posts);
                     }
                     Err(error) => {
                         println!("{:#?}", error);
@@ -33,7 +35,6 @@ impl api_server::Api for APIImplementation {
                 println!("{:#?}", error);
             }
         };
-        let ret = GalleryResponse { posts: [].to_vec() };
         Ok(tonic::Response::new(ret))
     }
 }
